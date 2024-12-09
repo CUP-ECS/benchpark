@@ -49,7 +49,7 @@ class Caliper(SpackModifier):
 
     env_var_modification(
         "CALI_CONFIG",
-        "spot(output={}{}),metadata(file={})".format(_cali_datafile, "${CALI_CONFIG_MODE}", _caliper_metadata_file),
+        "spot(output={}{}),metadata(file={}),metadata(file=/etc/node_info.json,keys=\"host.name,host.cluster,host.os\")".format(_cali_datafile, "${CALI_CONFIG_MODE}", _caliper_metadata_file),
         method="set",
         modes=[_default_mode],
     )
@@ -102,7 +102,7 @@ class Caliper(SpackModifier):
 
         # Write to the Caliper metadata file    
         cali_metadata_file = self.expander.expand_var(self._caliper_metadata_file) 
-        print(f"writing to %s", cali_metadata_file)
+        # print(json.dumps(experiment_metadata))
         with open(cali_metadata_file, "w") as f: 
             f.write(json.dumps(experiment_metadata)) 
 
@@ -112,4 +112,3 @@ class Caliper(SpackModifier):
     software_spec("caliper", pkg_spec="caliper")
 
     required_package("caliper")
-    
